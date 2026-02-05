@@ -1,4 +1,19 @@
 {{ define "main" }}
-<h1>{{ .Title }}</h1>
-{{ .Content }}
+<article>
+    <header>
+        <h1>{{ .Title }}</h1>
+        {{ if or .Date .Params.author .Params.tags }}
+        <div>
+            {{ if not .Date.IsZero }}
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+            {{ end }}
+            {{ with .Params.author }}{{ if not $.Date.IsZero }}· {{ end }}By {{ . }}{{ end }}
+            {{ with .Params.tags }}{{ if or (not $.Date.IsZero) $.Params.author }}· {{ end }}Tags: {{ range $index, $tag := . }}{{ if $index }}, {{ end }}<a href="{{ "tags/" | relURL }}{{ $tag | urlize }}/">{{ $tag }}</a>{{ end }}{{ end }}
+        </div>
+        {{ end }}
+    </header>
+    
+    {{ .Content }}
+</article>
 {{ end }}
+
