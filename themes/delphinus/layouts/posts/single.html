@@ -2,17 +2,11 @@
 <article class="blog-post">
     <header class="blog-post__header">
         <h1>{{ .Title }}</h1>
-        <p class="text--muted">
+        <div>
             <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
             {{ with .Params.author }}· By {{ . }}{{ end }}
-        </p>
-        {{ with .Params.tags }}
-        <p class="blog-post__tags">
-            {{- range . -}}
-            <a href="{{ "tags/" | relURL }}{{ . | urlize }}/" class="tag">{{ . }}</a>
-            {{- end -}}
-        </p>
-        {{ end }}
+            {{ with .Params.tags }}· Tags: {{ range $index, $tag := . }}{{ if $index }}, {{ end }}<a href="{{ "tags/" | relURL }}{{ $tag | urlize }}/">{{ $tag }}</a>{{ end }}{{ end }}
+        </div>
     </header>
     
     <div class="blog-post__content">
