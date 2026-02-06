@@ -84,6 +84,38 @@ hugo new nyheder/min-nyhed.md
 
 ```bash
 hugo --minify
+docker run --rm -v $(pwd)/public:/site -w /site node:20-alpine npx pagefind --site .
 ```
 
 Output gemmes i `public/` mappen.
+
+## Search (Pagefind)
+
+This template uses [Pagefind](https://pagefind.app/) for search functionality. After building Hugo, run Pagefind to index the content:
+
+### Using Docker
+
+```bash
+# Build and index
+hugo --minify
+docker run --rm -v $(pwd)/public:/site -w /site node:20-alpine npx pagefind --site .
+```
+
+For development, you can run:
+```bash
+hugo && docker run --rm -v $(pwd)/public:/site -w /site node:20-alpine npx pagefind --site . && hugo server
+```
+
+### With Node installed
+
+```bash
+# Install pagefind (one time)
+npm install -g pagefind
+
+# Build and index
+hugo --minify
+pagefind --site public
+
+# For development
+hugo && pagefind --site public && hugo server
+```

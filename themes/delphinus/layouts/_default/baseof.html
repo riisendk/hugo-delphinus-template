@@ -33,6 +33,21 @@
                             {{- end -}}
                         {{- end -}}
                     </div>
+                    <button class="nav__toggle" aria-haspopup="true" aria-expanded="false" title="Menu">Menu</button>
+                </div>
+                <div class="nav__search" role="search">
+                    <form class="form" action="{{ "search/" | relURL }}" method="get">
+                        <div class="form__inline-submit">
+                            <div class="form__field form__field--inline-label">
+                                <label for="nav-search">Search</label>
+                                <input id="nav-search" name="q" type="search">
+                            </div>
+                            <input class="form__inline-submit__button" type="submit" value="Submit">
+                        </div>
+                    </form>
+                </div>
+                <div class="nav__utilities nav__utilities--has-only-search-toggle">
+                    <button class="nav__search-toggle nav__item nav__item--icon nav__item--icon--hide-label" aria-haspopup="true" aria-expanded="false">Show search</button>
                 </div>
             </nav>
         </header>
@@ -43,7 +58,7 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="page__content theme--normal" id="content">
+        <main class="page__content theme--normal" id="content" data-pagefind-body>
             <div class="page__content__block">
                 {{ block "main" . }}{{ end }}
             </div>
@@ -89,5 +104,42 @@
     
     <!-- Delphinus JS from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@aarhus-university/au-designsystem-delphinus@1.11.6/public/projects/config-tools/js/app.min.js"></script>
+    
+    <!-- Pagefind -->
+    <script src="{{ "pagefind/pagefind-ui.js" | relURL }}"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            // Initialize Pagefind on search page
+            const searchContainer = document.getElementById('search');
+            if (searchContainer) {
+                new PagefindUI({
+                    element: "#search",
+                    showSubResults: true,
+                    showImages: false
+                });
+                
+                // Get query parameter and trigger search
+                const urlParams = new URLSearchParams(window.location.search);
+                const query = urlParams.get('q');
+                if (query) {
+                    const input = searchContainer.querySelector('input');
+                    if (input) {
+                        input.value = query;
+                        input.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+                }
+                
+                // Style Load More button with Delphinus class
+                const observer = new MutationObserver(function() {
+                    searchContainer.querySelectorAll('.pagefind-ui__button').forEach(function(btn) {
+                        if (!btn.classList.contains('button')) {
+                            btn.classList.add('button');
+                        }
+                    });
+                });
+                observer.observe(searchContainer, { childList: true, subtree: true });
+            }
+        });
+    </script>
 </body>
 </html>

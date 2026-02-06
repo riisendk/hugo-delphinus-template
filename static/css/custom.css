@@ -6,3 +6,9 @@
     max-width: none;
 }
 
+/* Hide Pagefind search input on results page - navbar has search already */
+#search .pagefind-ui__form > .form__field,
+#search .pagefind-ui__search-input,
+#search .pagefind-ui__search-clear {
+    display: none;
+}
