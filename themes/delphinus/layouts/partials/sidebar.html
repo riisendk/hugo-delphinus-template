@@ -1,0 +1,13 @@
+<nav class="nav nav--vertical nav--has-active-item" aria-label="Documentation navigation">
+    <div class="nav__items">
+    {{- $docSection := .Site.GetPage "documentation" -}}
+    {{- if $docSection -}}
+        {{- range $docSection.Sections.ByWeight -}}
+        <h2 class="nav__header">{{ .Title }}</h2>
+            {{- range .RegularPages.ByWeight -}}
+        <a href="{{ .RelPermalink }}" class="nav__item{{ if eq $.RelPermalink .RelPermalink }} nav__item--active{{ end }}">{{ .Title }}</a>
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+    </div>
+</nav>

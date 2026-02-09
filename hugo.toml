@@ -1,32 +1,12 @@
 baseURL = 'https://example.org/'
-languageCode = 'da'
-title = 'Mit AU Site'
-
-[params]
-  siteName = "Mit AU Site"
-  description = "En Hugo site baseret på AU Delphinus Designsystem"
-  # Skift til "en" for engelsk
-  language = "da"
-
-[menu]
-  [[menu.main]]
-    name = "Forside"
-    url = "/"
-    weight = 1
-  [[menu.main]]
-    name = "Om os"
-    url = "/om/"
-    weight = 2
-  [[menu.main]]
-    name = "Nyheder"
-    url = "/nyheder/"
-    weight = 3
-  [[menu.main]]
-    name = "Kontakt"
-    url = "/kontakt/"
-    weight = 4
+languageCode = 'en-us'
+title = 'Delphinus Documentation'
+theme = 'delphinus'
 
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+
+[params]
+  description = "Documentation site using Aarhus University's Delphinus Design System"

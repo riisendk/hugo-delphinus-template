@@ -1,0 +1,14 @@
+/* Override default max-width on text elements */
+.page__content__block p,
+.page__content__block ul,
+.page__content__block ol,
+.page__content__block li {
+    max-width: none;
+}
+
+/* Hide Pagefind search input on results page - navbar has search already */
+#search .pagefind-ui__form > .form__field,
+#search .pagefind-ui__search-input,
+#search .pagefind-ui__search-clear {
+    display: none;
+}

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-pagefind-ignore>{{ if .Title }}{{ .Title }} | {{ end }}{{ .Site.Title }}</title>
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    
+    <!-- Delphinus Design System CSS from CDN (config-tools project) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@aarhus-university/au-designsystem-delphinus@1.11.6/public/projects/config-tools/style.css">
+    <!-- Custom overrides -->
+    <link rel="stylesheet" href="{{ "css/custom.css" | relURL }}">
+</head>
+<body class="theme--dark body--scrollbar-dark">
+    <div class="page page--navigation-sidebar-left">
+        <!-- Skip to content for accessibility -->
+        <aside class="page__accessibility" aria-labelledby="skip-to-content">
+            <a href="#content" id="skip-to-content" class="button button--dimmed screenreader-only screenreader-only--show-on-focus">Skip to main content</a>
+        </aside>
+
+        <!-- Page Header with Navigation -->
+        <header class="page__header">
+            <nav class="nav nav--site-nav nav--has-active-item" aria-label="Main navigation">
+                <h1 class="nav__home">
+                    <a href="{{ .Site.BaseURL }}" class="nav__home__title">{{ .Site.Title }}</a>
+                </h1>
+                <div class="nav__site">
+                    <div class="nav__items">
+                        {{- $docSection := .Site.GetPage "documentation" -}}
+                        {{- if $docSection -}}
+                            {{- range $docSection.Sections.ByWeight -}}
+                        <a href="{{ .RelPermalink }}" class="nav__item{{ if $.IsDescendant . }} nav__item--active{{ end }}">{{ .Title }}</a>
+                            {{- end -}}
+                        {{- end -}}
+                    </div>
+                    <button class="nav__toggle" aria-haspopup="true" aria-expanded="false" title="Menu">Menu</button>
+                </div>
+                <div class="nav__search" role="search">
+                    <form class="form" action="{{ "search/" | relURL }}" method="get">
+                        <div class="form__inline-submit">
+                            <div class="form__field form__field--inline-label">
+                                <label for="nav-search">Search</label>
+                                <input id="nav-search" name="q" type="search">
+                            </div>
+                            <input class="form__inline-submit__button" type="submit" value="Submit">
+                        </div>
+                    </form>
+                </div>
+                <div class="nav__utilities nav__utilities--has-only-search-toggle">
+                    <button class="nav__search-toggle nav__item nav__item--icon nav__item--icon--hide-label" aria-haspopup="true" aria-expanded="false">Show search</button>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Sidebar with Local Navigation -->
+        <aside id="aside" class="page__sidebar-left theme--normal" aria-label="Local navigation">
+            {{ partial "sidebar.html" . }}
+        </aside>
+
+        <!-- Main Content -->
+        <main class="page__content theme--normal" id="content" data-pagefind-body>
+            <div class="page__content__block">
+                {{ block "main" . }}{{ end }}
+            </div>
+        </main>
+
+        <!-- Page Footer -->
+        <footer class="page__footer">
+            <div class="page__footer__content">
+                <div class="row row--align-left">
+                    <div class="row__item row__item--basis-15">
+                        <h1 class="text--default-size text--pull">
+                            <strong>{{ .Site.Title }}</strong>
+                            <span class="u-avoid-wrap">Documentation</span>
+                        </h1>
+                        <p>
+                            Powered by Hugo &amp; Delphinus Design System
+                            <br>
+                            Aarhus University
+                        </p>
+                    </div>
+                    <div class="row__item row__item--basis-15">
+                        <h2 class="text--default-size text--strong text--pull">Links</h2>
+                        <ul class="list--dense ul--no-bullets">
+                            <li><a href="https://delphinus.au.dk/">Delphinus Design System</a></li>
+                            <li><a href="https://www.au.dk/">Aarhus University</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="page__footer__compliance">
+                <ul class="page__footer__compliance__links">
+                    <li><a href="https://international.au.dk/about/profile/privacy-policy/">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <object class="page__footer__logo" role="img" type="image/svg+xml" tabindex="-1" aria-labelledby="page-footer-logo">
+                <p id="page-footer-logo">The logo of Aarhus University.</p>
+            </object>
+            <object class="page__footer__seal" role="img" type="image/svg+xml" tabindex="-1" aria-labelledby="page-footer-seal">
+                <p id="page-footer-seal">The seal of Aarhus University.</p>
+            </object>
+        </footer>
+    </div>
+    
+    <!-- Delphinus JS from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@aarhus-university/au-designsystem-delphinus@1.11.6/public/projects/config-tools/js/app.min.js"></script>
+    
+    <!-- Pagefind -->
+    <script src="{{ "pagefind/pagefind-ui.js" | relURL }}"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            // Initialize Pagefind on search page
+            const searchContainer = document.getElementById('search');
+            if (searchContainer) {
+                new PagefindUI({
+                    element: "#search",
+                    showSubResults: true,
+                    showImages: false
+                });
+                
+                // Get query parameter and trigger search
+                const urlParams = new URLSearchParams(window.location.search);
+                const query = urlParams.get('q');
+                if (query) {
+                    const input = searchContainer.querySelector('input');
+                    if (input) {
+                        input.value = query;
+                        input.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+                }
+                
+                // Style Load More button with Delphinus class
+                const observer = new MutationObserver(function() {
+                    searchContainer.querySelectorAll('.pagefind-ui__button').forEach(function(btn) {
+                        if (!btn.classList.contains('button')) {
+                            btn.classList.add('button');
+                        }
+                    });
+                });
+                observer.observe(searchContainer, { childList: true, subtree: true });
+            }
+        });
+    </script>
+</body>
+</html>

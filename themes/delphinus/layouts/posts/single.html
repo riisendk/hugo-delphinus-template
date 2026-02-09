@@ -1,0 +1,23 @@
+{{ define "main" }}
+<article class="blog-post">
+    <header class="blog-post__header">
+        <h1 data-pagefind-meta="title">{{ .Title }}</h1>
+        <div>
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+            {{ with .Params.author }}· By {{ . }}{{ end }}
+            {{ with .Params.tags }}· Tags: {{ range $index, $tag := . }}{{ if $index }}, {{ end }}<a href="{{ "tags/" | relURL }}{{ $tag | urlize }}/">{{ $tag }}</a>{{ end }}{{ end }}
+        </div>
+    </header>
+    
+    <div class="blog-post__content">
+        {{ .Content }}
+    </div>
+
+    <footer class="blog-post__footer">
+        <hr>
+        <div>
+            <a href="{{ "posts/" | relURL }}" class="button button--dimmed">← Back to all posts</a>
+        </div>
+    </footer>
+</article>
+{{ end }}

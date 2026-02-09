@@ -1,0 +1,61 @@
+{{ define "main" }}
+<article>
+    <h1 data-pagefind-meta="title">Welcome to AU Documentation using Delphinus</h1>
+    
+    <div class="row">
+        <div class="row__item">
+            <p>This documentation site is built using Hugo with Aarhus University's Delphinus Design System.</p>
+            <p>Have a look around. Enjoy!</p>
+        </div>
+        <div class="row__item">
+            <aside aria-label="Contact options" class="box theme--background-secondary row__item-content">
+                <h2>
+                    <span aria-hidden="true" class="text--label-header text--pull">
+                        <span class="icon" data-icon=""></span>
+                        Say hi!
+                    </span>
+                    Ideas? Questions? Feedback?
+                </h2>
+                <p>
+                    Please reach out to us at the following contacts:
+                    <span class="u-avoid-wrap">Mit navns navn </span>
+                    at <a href="mailto:mail@mail.dk">mail@mail.dk</a>
+                </p>
+            </aside>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Blog Posts Section -->
+    {{- $posts := where .Site.RegularPages "Section" "posts" -}}
+    {{- if $posts -}}
+    <section class="blog-section">
+        <h2>Latest Posts</h2>
+        <div class="row">
+            {{- range first 3 $posts.ByDate.Reverse -}}
+            <div class="row__item row__item--basis-30">
+                <article class="box theme--background-secondary blog-card">
+                    <h3 class="text--pull">
+                        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                    </h3>
+                    <p class="text--small text--muted">
+                        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+                        {{ with .Params.author }}· {{ . }}{{ end }}
+                    </p>
+                    <p>{{ .Description | default .Summary | truncate 120 }}</p>
+                    <a href="{{ .RelPermalink }}" class="button button--small">Read more</a>
+                </article>
+            </div>
+            {{- end -}}
+        </div>
+        
+        {{- if gt (len $posts) 3 -}}
+        <div style="margin-top: 1.5rem;">
+            <a href="{{ "posts/" | relURL }}" class="button">View all posts</a>
+        </div>
+        {{- end -}}
+    </section>
+    {{- end -}}
+</article>
+{{ end }}
